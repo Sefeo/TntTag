@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="TntTag:jar">
+    <output-path>$PROJECT_DIR$/../InGameServer/plugins</output-path>
+    <root id="archive" name="TntTag.jar">
+      <element id="module-output" name="TntTag" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/../InGameServer/Spigot.jar" path-in-jar="/" />
+      <element id="library" level="project" name="Desktop" />
+    </root>
+  </artifact>
+</component>

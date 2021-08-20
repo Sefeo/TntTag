@@ -1,0 +1,10 @@
+main: TntTag.Main
+name: TntTag
+version: 1.0
+commands:
+  arena:
+    description: Start a game
+    usage: /arena
+  sb:
+    description: Start a game
+    usage: /sb
