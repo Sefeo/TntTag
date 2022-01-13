@@ -1,6 +1,7 @@
 package TntTag.manager;
 
 import TntTag.arena.Arena;
+import TntTag.data.Config;
 import TntTag.listener.BungeeListener;
 import TntTag.data.UpdateData;
 import TntTag.Main;
@@ -9,7 +10,6 @@ import TntTag.shop.Inventories;
 import TntTag.listener.Handler;
 import TntTag.scoreboard.Scoreboard;
 import org.bukkit.Server;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
@@ -22,9 +22,9 @@ public class Manager {
     private UpdateData updateData;
     private Buffs buffs;
     private Inventories inv;
-    private Handler handler;
-    private Scoreboard scoreboard;
+    private Scoreboard scoreboards;
     private BungeeListener bungeeListener;
+    private Config config;
 
     public Manager(Main main) {
         this.plugin = main;
@@ -32,9 +32,9 @@ public class Manager {
         this.updateData = new UpdateData(this);
         this.buffs = new Buffs(this);
         this.inv = new Inventories(this);
-        this.handler = new Handler(this);
-        this.scoreboard = new Scoreboard(this);
+        this.scoreboards = new Scoreboard(this);
         this.bungeeListener = new BungeeListener(this);
+        this.config = new Config(this);
     }
 
     public Collection<? extends Player> getPlayers() { // геттер всех игроков онлайн
@@ -61,27 +61,17 @@ public class Manager {
         return inv;
     }
 
-    public Handler getHandler() {
-        return handler;
-    }
-
     public Scoreboard getScoreboard() {
-        return scoreboard;
+        return scoreboards;
     }
 
     public BungeeListener getBungeeListener() {
         return bungeeListener;
     }
 
-    public FileConfiguration getConfig(){
-        return plugin.getConfig();
-    }
-
-    public void saveConfig(){
-        plugin.saveConfig();
-    }
-
     public Main getPlugin(){
         return plugin;
     }
+
+    public Config getConfig() { return config; }
 }

@@ -14,7 +14,7 @@ public class UpdateData {
         this.manager = manager;
     }
 
-    public void updateWinCount(Player p, boolean isWin) { // isWin true - добавляем победу, false - убираем
+    public void updateWinCount(Player p, boolean isWin) { // isWin true - добавляем победу, false - не добавляем
         try {
             PreparedStatement preparedStatement;
             if (isWin) {
@@ -23,7 +23,7 @@ public class UpdateData {
                 );
             } else {
                 preparedStatement = Main.getInstance().getConnection().prepareStatement(
-                        "UPDATE users SET Game=Game+1, Win=Win-1 WHERE UUID = ?"
+                        "UPDATE users SET Game=Game+1 WHERE UUID = ?"
                 );
             }
 

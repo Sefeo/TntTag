@@ -8,8 +8,6 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 public class BungeeListener implements PluginMessageListener {
 
-    public static String[] parts;
-
     private Manager manager;
 
     public BungeeListener(Manager manager) {

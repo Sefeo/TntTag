@@ -1,6 +1,5 @@
 package TntTag.scoreboard;
 
-import TntTag.arena.Arena;
 import TntTag.manager.Manager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -14,11 +13,9 @@ import java.sql.ResultSet;
 public class Scoreboard {
 
     private Manager manager;
-    private Arena arena;
 
     public Scoreboard(Manager manager) {
         this.manager = manager;
-        this.arena = manager.getArena();
     }
 
     public void updateSbNoPlayers(Player p) { // скорборд, когда нет отсчёта до начала раунда (игрок один на сервере или в хабе)
@@ -35,7 +32,7 @@ public class Scoreboard {
             statement.close();
             result.close();
 
-            ScoreboardManager managerSb = Bukkit.getScoreboardManager(); // это и всё ниже - создание самого скорборда и его полей
+            ScoreboardManager managerSb = Bukkit.getScoreboardManager();
             final org.bukkit.scoreboard.Scoreboard board = managerSb.getNewScoreboard();
             final Objective objective = board.registerNewObjective("1", "2");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
@@ -122,7 +119,7 @@ public class Scoreboard {
             Score score4 = objective.getScore("§3");
             score4.setScore(7);
 
-            Score score5 = objective.getScore(" Ожидаем: §e" + secondsToString(arena.waitingTime));
+            Score score5 = objective.getScore(" Ожидаем: §e" + secondsToString(manager.getArena().waitingTime));
             score5.setScore(6);
 
             Score score6 = objective.getScore("§4");
@@ -153,26 +150,26 @@ public class Scoreboard {
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         objective.setDisplayName(ChatColor.BOLD + "§eTNT TAG");
 
-        Score score = objective.getScore(ChatColor.GRAY + " Раунд #" + arena.round);
+        Score score = objective.getScore(ChatColor.GRAY + " Раунд #" + manager.getArena().round);
         score.setScore(8);
 
         Score score1 = objective.getScore("§1");
         score1.setScore(7);
 
         Score score2;
-        if (arena.waitingTime <= 15 && arena.waitingTime > 5)
-            score2 = objective.getScore(ChatColor.YELLOW + " До взрыва " + ChatColor.GOLD + secondsToString(arena.waitingTime));
-        else if (arena.waitingTime <= 5)
-            score2 = objective.getScore(ChatColor.YELLOW + " До взрыва " + ChatColor.RED + secondsToString(arena.waitingTime));
+        if (manager.getArena().waitingTime <= 15 && manager.getArena().waitingTime > 5)
+            score2 = objective.getScore(ChatColor.YELLOW + " До взрыва " + ChatColor.GOLD + secondsToString(manager.getArena().waitingTime));
+        else if (manager.getArena().waitingTime <= 5)
+            score2 = objective.getScore(ChatColor.YELLOW + " До взрыва " + ChatColor.RED + secondsToString(manager.getArena().waitingTime));
         else
-            score2 = objective.getScore(ChatColor.YELLOW + " До взрыва " + ChatColor.GREEN + secondsToString(arena.waitingTime));
+            score2 = objective.getScore(ChatColor.YELLOW + " До взрыва " + ChatColor.GREEN + secondsToString(manager.getArena().waitingTime));
         score2.setScore(6);
 
         Score score3 = objective.getScore("§2");
         score3.setScore(5);
 
         Score score4;
-        if (!arena.tntList.contains(p))
+        if (!manager.getArena().tntList.contains(p))
             score4 = objective.getScore(" Цель: " + ChatColor.GREEN + "Убегай!  ");
         else score4 = objective.getScore(" Цель: " + ChatColor.RED + "Передай!  ");
         score4.setScore(4);
@@ -180,8 +177,7 @@ public class Scoreboard {
         Score score5 = objective.getScore("§3");
         score5.setScore(3);
 
-        // А тут уже берём список выживших
-        Score score6 = objective.getScore(" Осталось: " + ChatColor.GREEN + arena.survivors.size() + " Игроков");
+        Score score6 = objective.getScore(" Осталось: " + ChatColor.GREEN + manager.getArena().survivors.size() + " Игроков");
         score6.setScore(2);
 
         Score score7 = objective.getScore("§4");

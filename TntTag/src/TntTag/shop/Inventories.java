@@ -18,14 +18,11 @@ public class Inventories {
     private ItemStack itemSpeed;
     private ItemStack itemSlow;
     private ItemStack itemInvul;
-    private StringBuilder stringBuilder;
 
     private Manager manager;
-    private Buffs buffs;
 
     public Inventories(Manager manager) {
         this.manager = manager;
-        this.buffs = manager.getBuffs();
     }
 
     public void createShopInv(Player p) { // Создание инвентаря магазина
@@ -42,9 +39,9 @@ public class Inventories {
         shop.setItem(6, itemInvul);
     }
 
-    private void createSpeedItem(Player p){ // Создает предмет покупки скорости в магазине
-        int speedPrice = buffs.getItemPrice(p, "Speed");
-        int speedValue = buffs.getBuffValue(p, "Speed");
+    private void createSpeedItem(Player p){
+        int speedPrice = manager.getBuffs().getItemPrice(p, "Speed");
+        int speedValue = manager.getBuffs().getBuffValue(p, "Speed");
 
         List<String> loreSpeed = new ArrayList<>();
         itemSpeed = new ItemStack(Material.FEATHER);
@@ -54,36 +51,19 @@ public class Inventories {
         if (speedValue < 5) metaSpeed.setDisplayName(ChatColor.RESET + "Ускорение" + ChatColor.GREEN + " [" + speedValue + "/5]");
         else metaSpeed.setDisplayName(ChatColor.RESET + "Ускорение" + ChatColor.GREEN + " [МАКСИМУМ]");
 
-        StringBuilder stringBuilder = new StringBuilder(ChatColor.RESET + "При получении удара у вас есть шанс ");
-        switch(speedValue) {
-            case 0:
-                stringBuilder.append("5%");
-                break;
-            case 1:
-                stringBuilder.append("7%");
-                break;
-            case 2:
-                stringBuilder.append("9%");
-                break;
-            case 3:
-                stringBuilder.append("11%");
-                break;
-            case 4: default:
-                stringBuilder.append("13%");
-                break;
-        }
-        loreSpeed.add(stringBuilder.toString());
+        int loreSpeedValue = speedValue+1; // очень костыльно, но я заебался уже с этими значениями
+        if(loreSpeedValue > 5) loreSpeedValue = 5;
+        loreSpeed.add(ChatColor.RESET + "При получении удара у вас есть шанс " + manager.getConfig().speedBuffChance.get(loreSpeedValue) + "%");
         loreSpeed.add(ChatColor.RESET + "получить ускорение 1 секунду");
-
         if (speedValue < 5) loreSpeed.add(ChatColor.RESET + "Цена: §e" + speedPrice + "⭐");
 
         metaSpeed.setLore(loreSpeed);
         itemSpeed.setItemMeta(metaSpeed);
     }
 
-    private void createSlowItem(Player p) { // Создает предмет покупки замедления в магазине
-        int slowPrice = buffs.getItemPrice(p, "Slow");
-        int slowValue = buffs.getBuffValue(p, "Slow");
+    private void createSlowItem(Player p) {
+        int slowPrice = manager.getBuffs().getItemPrice(p, "Slow");
+        int slowValue = manager.getBuffs().getBuffValue(p, "Slow");
 
         List<String> loreSlow = new ArrayList<>();
         itemSlow = new ItemStack(Material.DIAMOND_SWORD);
@@ -93,36 +73,20 @@ public class Inventories {
         if (slowValue < 5) metaSlow.setDisplayName(ChatColor.RESET + "Замедление" + ChatColor.GREEN + " [" + slowValue + "/5]");
         else metaSlow.setDisplayName(ChatColor.RESET + "Замедление" + ChatColor.GREEN + " [МАКСИМУМ]");
 
-        stringBuilder = new StringBuilder(ChatColor.RESET + "При нанесении удара у вас есть шанс ");
-        switch(slowValue) {
-            case 0:
-                stringBuilder.append("5%");
-                break;
-            case 1:
-                stringBuilder.append("7%");
-                break;
-            case 2:
-                stringBuilder.append("9%");
-                break;
-            case 3:
-                stringBuilder.append("11%");
-                break;
-            case 4: default:
-                stringBuilder.append("13%");
-                break;
-        }
-        loreSlow.add(stringBuilder.toString());
+        int loreSlowValue = slowValue+1;
+        if(loreSlowValue > 5) loreSlowValue = 5;
+        loreSlow.add(ChatColor.RESET + "При нанесении удара у вас есть шанс " + manager.getConfig().slowBuffChance.get(loreSlowValue) + "%");
         loreSlow.add(ChatColor.RESET + "замедлить противника на 1 секунду");
-
         if (slowValue < 5) loreSlow.add(ChatColor.RESET + "Цена: §e" + slowPrice + "⭐");
 
         metaSlow.setLore(loreSlow);
         itemSlow.setItemMeta(metaSlow);
     }
 
-    private void createInvulItem(Player p) { // Создает предмет покупки неуяза в магазине
-        int invulPrice = buffs.getItemPrice(p, "Invul");
-        int invulValue = buffs.getBuffValue(p, "Invul");
+    private void createInvulItem(Player p) {
+        int invulPrice = manager.getBuffs().getItemPrice(p, "Invul");
+        int invulValue = manager.getBuffs().getBuffValue(p, "Invul");
+        if(invulValue > 5) invulValue = 5;
 
         List<String> loreInvul = new ArrayList<>();
         itemInvul = new ItemStack(Material.GOLDEN_APPLE);
@@ -132,27 +96,10 @@ public class Inventories {
         if (invulValue < 5) metaInvul.setDisplayName(ChatColor.RESET + "Неуязвимость" + ChatColor.GREEN + " [" + invulValue + "/5]");
         else metaInvul.setDisplayName(ChatColor.RESET + "Неуязвимость" + ChatColor.GREEN + " [МАКСИМУМ]");
 
-        stringBuilder = new StringBuilder(ChatColor.RESET + "После появления новых ТНТ у вас есть шанс ");
-        switch(invulValue) {
-            case 0:
-                stringBuilder.append("1%");
-                break;
-            case 1:
-                stringBuilder.append("2%");
-                break;
-            case 2:
-                stringBuilder.append("3%");
-                break;
-            case 3:
-                stringBuilder.append("4%");
-                break;
-            case 4: default:
-                stringBuilder.append("5%");
-                break;
-        }
-        loreInvul.add(stringBuilder.toString());
+        int loreInvulValue = invulValue+1;
+        if(loreInvulValue > 5) loreInvulValue = 5;
+        loreInvul.add(ChatColor.RESET + "После появления новых ТНТ у вас есть шанс " + manager.getConfig().invulBuffChance.get(loreInvulValue) + "%");
         loreInvul.add(ChatColor.RESET + "получить иммунитет к становлению ТНТ на 3 секунды");
-
         if (invulValue < 5) loreInvul.add(ChatColor.RESET + "Цена: §e" + invulPrice + "⭐");
 
         metaInvul.setLore(loreInvul);

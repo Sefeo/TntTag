@@ -11,16 +11,22 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.Statement;
 
 public class Main extends JavaPlugin {
+    private Manager manager;
 
     private static Main instance;
     private Connection connection;
 
     @Override
     public void onEnable() {
-        Manager manager = new Manager(this);
+        manager = new Manager(this);
 
+        saveDefaultConfig();
+        manager.getConfig().loadConfig();
+
+        System.out.println("[TntTag] Loaded!");
         MinecraftServer.getServer().setMotd("GameStartFalse");
 
         setInstance(this);
@@ -30,7 +36,6 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SubListeners(manager), this);
 
         getCommand("arena").setExecutor(new Commands(manager));
-        getCommand("sb").setExecutor(new Commands(manager));
 
         this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         this.getServer().getMessenger().registerIncomingPluginChannel(this, "BungeeCord", new BungeeListener(manager));
@@ -51,10 +56,26 @@ public class Main extends JavaPlugin {
     private void listConnection() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String url1 = "jdbc:mysql://127.0.0.1:3306/server?user=root&password=";
-            this.connection = DriverManager.getConnection(url1);
+            String connectUrl = "jdbc:mysql://" + manager.getConfig().dbUrl + "/" + manager.getConfig().dbMainTable;
+            this.connection = DriverManager.getConnection(connectUrl, manager.getConfig().dbUser, manager.getConfig().dbPassword);
+
+            String createTable = "CREATE TABLE IF NOT EXISTS " + manager.getConfig().dbMainTable + "." + manager.getConfig().dbTable + " (" // подключаемся к бд и создаем таблицу
+                    + "ID INT(11) NOT NULL primary key AUTO_INCREMENT,"
+                    + "UUID VARCHAR(36) NOT NULL,"
+                    + "Nick VARCHAR(26) NOT NULL,"
+                    + "Money INT(11) NOT NULL,"
+                    + "Win INT(11) NOT NULL,"
+                    + "Game INT(11) NOT NULL,"
+                    + "Speed INT(11) NOT NULL,"
+                    + "Slow INT(11) NOT NULL,"
+                    + "Invul INT(11) NOT NULL)";
+
+            Statement statement = this.connection.createStatement();
+            statement.execute(createTable);
         } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("[TntTag] Couldn`t connect to the database, disabling plugin...");
+            onDisable();
         }
     }
 }

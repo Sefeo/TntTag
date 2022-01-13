@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="TntTag">
+    <output-path>$USER_HOME$/Desktop/MinecraftProjects/InGameServer/plugins</output-path>
+    <root id="archive" name="TntTag.jar">
+      <element id="module-output" name="TntTag" />
+    </root>
+  </artifact>
+</component>

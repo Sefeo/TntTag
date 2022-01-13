@@ -1,0 +1,64 @@
+# Location - координаты места спавна (название мира, X, Y, Z)
+Location: world, 1, 29, 1
+
+Database: # данные от бд, MainTable - основная таблица, которую нужно создать вручную, Table - таблица с данными внутри, создается автоматически, Password - при отсутствии ставить ~
+  Url: 127.0.0.1:3306
+  MainTable: server
+  Table: users
+  User: root
+  Password: ~
+
+# Cost - цена лвла бафа, chance - шанс его срабатывания на это лвле
+Speed:
+  Level:
+    1:
+      Cost: 1000
+      Chance: 5
+    2:
+      Cost: 2000
+      Chance: 7
+    3:
+      Cost: 5000
+      Chance: 9
+    4:
+      Cost: 10000
+      Chance: 11
+    5:
+      Cost: 15000
+      Chance: 13
+
+Slow:
+  Level:
+    1:
+      Cost: 2000
+      Chance: 5
+    2:
+      Cost: 4000
+      Chance: 7
+    3:
+      Cost: 8000
+      Chance: 9
+    4:
+      Cost: 15000
+      Chance: 11
+    5:
+      Cost: 20000
+      Chance: 13
+
+Invul:
+  Level:
+    1:
+      Cost: 3000
+      Chance: 1
+    2:
+      Cost: 6000
+      Chance: 2
+    3:
+      Cost: 15000
+      Chance: 3
+    4:
+      Cost: 20000
+      Chance: 4
+    5:
+      Cost: 30000
+      Chance: 5
